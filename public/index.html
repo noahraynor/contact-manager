@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Contact Manager</title>
+  <link rel="stylesheet" href="/stylesheets/reset.css">
+  <style>
+
+    header {
+      display: flex;
+      width: 100%;
+      height: 100px;
+      justify-content: center;
+      background-color: purple;
+      color: white;
+    }
+
+    h1 {
+      margin-top: 20px;
+      font-size: 40px;
+    }
+
+    h2 {
+      font-size: 28px; /* Make it larger */
+      font-weight: bold; /* Emphasize the header */
+      text-align: left; /* Align it to the left */
+      padding: 10px 0; /* Add vertical spacing */
+      margin-bottom: 20px; /* Space below the header */
+      border-bottom: 2px solid white; /* Add a bottom border for distinction */
+      text-transform: uppercase; /* Capitalize all letters for impact */
+      letter-spacing: 1.5px; /* Add some spacing between letters */
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: start;
+      background-color: white;
+      height: 40px;
+      padding: 0 10px;
+      box-sizing: border-box;
+    }
+
+    main {
+      display: flex;
+      width: 100%;
+      height: 100%; /* Full viewport height minus header and nav height */
+      align-items: flex-start; /* Align children to the top */
+    }
+
+    #home {
+      display: flex;
+      width: 100%; /* Ensure it spans the full width */
+      height: 100%; /* Ensure it matches the height of the container */
+      box-sizing: border-box; /* Include padding in height and width */
+    }
+
+    #home_left, #home_right {
+      display: flex;
+      flex-direction: column; /* Keep content in a vertical stack */
+      padding: 10px;
+      box-sizing: border-box; /* Include padding in width/height calculations */
+    }
+
+    #home_left {
+      flex: 7; /* Take up 70% of the width */
+      overflow-y: auto; /* Allow scrolling if content overflows vertically */
+      min-height: 100%; /* Match the height of the parent container */
+    }
+
+    #home_right {
+      flex: 3; /* Take up 30% of the width */
+      overflow-y: auto; /* Allow scrolling if content overflows vertically */
+      min-height: 100%; /* Match the height of the parent container */
+    }
+
+    /* Header styles for alignment */
+    h2 {
+      font-size: 28px; /* Consistent font size */
+      font-weight: bold;
+      text-align: left;
+      padding: 10px 0;
+      margin: 0; /* Remove margins to align better */
+      margin-bottom: 10px;
+      border-bottom: 2px solid black; /* Add a bottom border */
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    /* Contact card styling */
+    .contact {
+      background-color: white; /* Softer, lighter background for contrast */
+      color: black; /* Darker text for better readability */
+      border-radius: 10px; /* Slightly more rounded corners for a softer look */
+      padding: 15px; /* Increase padding for better spacing */
+      margin-bottom: 15px; /* Add more spacing between contact cards */
+      border: 1px solid black;
+    }
+
+    .contact dl {
+      margin: 0;
+    }
+
+    .contact dt {
+      font-weight: bold; /* Emphasize labels */
+      color: #555; /* Differentiate label color */
+      margin-bottom: 5px;
+    }
+
+    .contact dd {
+      margin: 0 0 10px 0; /* Add spacing between items */
+      color: #444; /* Slightly lighter text for readability */
+    }
+
+    .contact dd:last-of-type {
+      margin-bottom: 0; /* Remove extra margin after the last item */
+    }
+
+    #add_contact_button, #manage_tags_button, #view_contacts_button {
+      margin-right: 10px;
+      cursor: pointer;
+    }
+
+    .tag {
+      margin-top: 10px;
+      font-size: 25px;
+    }
+
+    #contact-form {
+      width: 400px; /* Set the width of the form */
+      font-family: Arial, sans-serif; /* Use a simple font */
+    }
+
+    /* Style each row */
+    .form-row {
+      display: flex; /* Align label and input on the same line */
+      align-items: center; /* Vertically center align label and input */
+      margin-bottom: 15px; /* Add spacing between rows */
+    }
+
+    /* Style the labels */
+    #contact-form label {
+      width: 100px; /* Fixed width for labels */
+      margin-right: 10px; /* Space between label and input */
+      text-align: right; /* Align label text to the right */
+      font-weight: bold; /* Make labels bold */
+    }
+
+    /* Style the inputs */
+    #contact-form input {
+      flex: 1; /* Allow input to take up the remaining space */
+      padding: 8px; /* Add padding for usability */
+      border: 1px solid #ccc; /* Add a light border */
+      border-radius: 4px; /* Round the corners */
+    }
+
+    /* Style the submit button */
+    #contact-form button {
+      width: 100%; /* Make the button span the form width */
+      padding: 10px; /* Add padding for usability */
+      background-color: #007bff; /* Blue background color */
+      color: white; /* White text color */
+      border: none; /* Remove borders */
+      border-radius: 4px; /* Round the corners */
+      cursor: pointer; /* Pointer cursor on hover */
+      margin-bottom: 5px;
+    }
+
+    #contact-form button:hover {
+      background-color: #0056b3; /* Darker blue on hover */
+    }
+
+    #home.hidden {
+      display: none;
+    }
+
+    #add_contact.hidden {
+      display: none;
+    }
+
+    #manage_tags.hidden {
+      display: none;
+    }
+
+    #edit_contact.hidden {
+      display: none;
+    }
+
+    #add_contact, #edit_contact {
+      padding: 10px;
+      display: flex;
+    }
+
+    #add_contact_left, #edit_contact_left {
+      margin-right: 20px;
+    }
+
+    form #delete_last_tag {
+      margin-left: 10px;
+      width: 10%; /* Make the button span the form width */
+      height: 30px;
+      padding: 10px; /* Add padding for usability */
+      background-color: red; /* Blue background color */
+      color: white; /* White text color */
+      border: none; /* Remove borders */
+      border-radius: 4px; /* Round the corners */
+      cursor: pointer; /* Pointer cursor on hover */
+      margin-bottom: 5px;
+    }
+
+    #manage_tags {
+      padding: 10px;
+    }
+
+    .delete_tag {
+      font-size: 15px;
+    }
+
+    #search_container{
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    
+
+  </style>
+  <script src="/javascripts/jquery.js"></script>
+  <script src="/javascripts/handlebars.js"></script>
+  <script type='module' src="/javascripts/app.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Contact Manager</h1>
+  </header>
+  <nav>
+    <button id="view_contacts_button" data-page="view">View Contacts</button>
+    <button id="add_contact_button" data-page="add">Add Contact</button>
+    <button id="manage_tags_button" data-page="manage">Manage Tags</button>
+  </nav>
+  <main>
+    <div id="home" class="">
+      <div id="home_left">
+        <h2>Contacts</h2>
+        <div id="search_container">
+          <label for="search">Search Name:</label>
+          <input type="text" id="search" name="search">
+        </div>
+        <div id="contacts"></div>
+      </div>
+      <div id="home_right">
+        <h2>Tags</h2>
+        <ul id="home_tags"></ul>
+      </div>
+    </div>
+    <div class='hidden' id="add_contact">
+      <div id="add_contact_left">
+        <h2>Add Contact</h2>
+        <form id="contact-form">
+          <div class="form-row">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="full_name" placeholder="Enter your name" required>
+          </div>
+          <div class="form-row">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+          </div>
+          <div class="form-row">
+            <label for="phone">Phone:</label>
+            <input type="tel" id="phone" name="phone_number" placeholder="Enter your phone number" required>
+          </div>
+          <div class="form-row">
+            <label>Tags:</label>
+            <p id="tag_add_contact">PIZZA</p>
+            <button id="delete_last_tag">X</button>
+          </div>
+          <button type="submit" id='contact_submit'>Submit</button>
+          <button>Cancel</button>
+        </form>
+      </div>
+      <div id="add_contact_right">
+        <h2>Add Tags</h2>
+        <ul id="add_contact_tags">
+        </ul>
+      </div>
+    </div>
+    <div class='hidden' id="manage_tags">
+      <h2>Manage Tags</h2>
+      <label for="tag_name">Tag Name:</label>
+      <input type="text" name="tag_name" id="tag_name">
+      <button>Add New Tag</button>
+      <ul>
+        <li class="tag"><button>test</button><p class="delete_tag">Delete</p></li>
+        <li class="tag"><button>test</button><p class="delete_tag">Delete</p></li>
+        <li class="tag"><button>test</button><p class="delete_tag">Delete</p></li>
+      </ul>
+    </div>
+    <div id="edit_contact" class="hidden">
+      <div id="edit_contact_left">
+        <h2>Edit Contact</h2>
+        <form id="contact-form">
+          <div class="form-row">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+          </div>
+          <div class="form-row">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+          </div>
+          <div class="form-row">
+            <label for="phone">Phone:</label>
+            <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+          </div>
+          <div class="form-row">
+            <label>Tags:</label>
+            <p id="">TEST ANOTHER PIZZA</p>
+            <button id="delete_last_tag">X</button>
+          </div>
+          <button type="submit">Submit</button>
+          <button>Cancel</button>
+        </form>
+      </div>
+      
+      <div id="edit_contact_right">
+        <h2>Add Tags</h2>
+        <ul>
+          <li class="tag"><button>test</button></li>
+          <li class="tag"><button>test</button></li>
+          <li class="tag"><button>test</button></li>          
+          <li class="tag"><button>test</button></li>
+        </ul>
+      </div>
+    </div>
+  </main>
+</body>
+<script id="contacts_hb" type="text/x-handlebars">
+  {{#each contacts}}
+    {{>contact}}
+  {{/each}}
+</script>
+<script id="contact_hb" type="text/x-handlebars">
+  <div class="contact" data-id="{{id}}">
+    <dl>
+      <dt>Name:</dt>
+      <dd>{{full_name}}</dd>
+      <dt>Phone Number:</dt>
+      <dd>{{phone_number}}</dd>
+      <dt>Email:</dt>
+      <dd>{{email}}</dd>
+      <dt>Tags:</dt>
+      <dd>{{tags}}</dd>
+      <dt><button class="edit_button">Edit</button></dt>
+      <dd><button class="delete_contact_button">Delete</button></dd>
+    </dl>
+  </div>
+</script>
+<script id="tags_hb" type="text/x-handlebars">
+  {{#each tags}}
+    <li class="tag"><button>{{this}}</button></li>
+  {{/each}}
+</script>
+</html>
